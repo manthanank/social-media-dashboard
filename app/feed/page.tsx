@@ -18,15 +18,34 @@ export default function FeedPage() {
   const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>({});
 
   React.useEffect(() => {
-    try {
-      const stored = localStorage.getItem("socialpulse_posts");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setPosts([...parsed, ...INITIAL_POSTS]);
+    fetch("/api/feed")
+      .then((res) => res.json())
+      .then((data) => {
+        try {
+          const stored = localStorage.getItem("socialpulse_posts");
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setPosts([...parsed, ...(data.posts || INITIAL_POSTS)]);
+              return;
+            }
+          }
+          if (data.posts && Array.isArray(data.posts)) {
+            setPosts(data.posts);
+          }
+        } catch (e) {
+          if (data.posts) setPosts(data.posts);
         }
-      }
-    } catch (e) {}
+      })
+      .catch(() => {
+        try {
+          const stored = localStorage.getItem("socialpulse_posts");
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) setPosts([...parsed, ...INITIAL_POSTS]);
+          }
+        } catch (e) {}
+      });
   }, []);
 
   const filteredPosts = posts.filter((p) =>
