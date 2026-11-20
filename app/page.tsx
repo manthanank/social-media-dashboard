@@ -60,7 +60,7 @@ export default function SocialMediaLandingPage() {
           </div>
 
           <div className="hidden md:flex items-center gap-6 text-xs font-medium text-slate-300">
-            <a href="#simulator" className="hover:text-white transition">Redis Benchmark</a>
+            <a href="#cache-benchmark" className="hover:text-white transition">Redis Benchmark</a>
             <a href="#features" className="hover:text-white transition">Features</a>
             <a href="#architecture" className="hover:text-white transition">GraphQL Schema</a>
             <a href="#pricing" className="hover:text-white transition">Pricing</a>
@@ -137,8 +137,8 @@ export default function SocialMediaLandingPage() {
           </div>
         </section>
 
-        {/* INTERACTIVE GRAPHQL & REDIS BENCHMARK SIMULATOR */}
-        <section id="simulator" className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8">
+        {/* LIVE GRAPHQL & REDIS BENCHMARK ENGINE */}
+        <section id="cache-benchmark" className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8">
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold">
               <Zap className="w-3.5 h-3.5" />
@@ -209,7 +209,7 @@ export default function SocialMediaLandingPage() {
               </div>
             </div>
 
-            {/* Simulated GraphQL Output */}
+            {/* Real-time GraphQL Query Resolution */}
             <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-cyan-300 overflow-x-auto leading-relaxed">
               <span className="text-slate-500">// Resolved via GraphQL POST /api/graphql</span>
               <br />

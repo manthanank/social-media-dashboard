@@ -17,6 +17,18 @@ export default function FeedPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>({});
 
+  React.useEffect(() => {
+    try {
+      const stored = localStorage.getItem("socialpulse_posts");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setPosts([...parsed, ...INITIAL_POSTS]);
+        }
+      }
+    } catch (e) {}
+  }, []);
+
   const filteredPosts = posts.filter((p) =>
     selectedPlatform === "all" ? true : p.platform === selectedPlatform
   );

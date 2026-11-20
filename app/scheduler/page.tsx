@@ -17,6 +17,23 @@ export default function SchedulerPage() {
   const [scheduledTime, setScheduledTime] = useState("Tomorrow at 10:00 AM EST");
   const [toastMessage, setToastMessage] = useState("");
 
+  React.useEffect(() => {
+    try {
+      const stored = localStorage.getItem("socialpulse_scheduled");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) setScheduledPosts(parsed);
+      }
+    } catch (e) {}
+  }, []);
+
+  const saveScheduled = (updated: ScheduledPost[]) => {
+    setScheduledPosts(updated);
+    try {
+      localStorage.setItem("socialpulse_scheduled", JSON.stringify(updated));
+    } catch (e) {}
+  };
+
   const triggerToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(""), 3000);
@@ -46,13 +63,42 @@ export default function SchedulerPage() {
       status: "queued",
     };
 
-    setScheduledPosts([newPost, ...scheduledPosts]);
+    saveScheduled([newPost, ...scheduledPosts]);
     setPostContent("");
-    triggerToast(`Post scheduled for ${scheduledTime} on ${targetPlatform}!`);
+    triggerToast(`Post queued for ${scheduledTime} on ${targetPlatform}!`);
+  };
+
+  const handlePublishNow = () => {
+    if (!postContent.trim()) return;
+
+    const livePost = {
+      id: `post-${Date.now()}`,
+      platform: targetPlatform,
+      authorName: "Alex Vance",
+      authorHandle: "@alexvance_dev",
+      authorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80",
+      content: postContent,
+      publishedAt: "Just now",
+      likes: 1,
+      shares: 0,
+      comments: 0,
+      views: 12,
+      sentiment: "positive",
+      tags: ["Omnichannel", targetPlatform.toUpperCase()],
+    };
+
+    try {
+      const stored = localStorage.getItem("socialpulse_posts");
+      const current = stored ? JSON.parse(stored) : [];
+      localStorage.setItem("socialpulse_posts", JSON.stringify([livePost, ...current]));
+    } catch (e) {}
+
+    setPostContent("");
+    triggerToast(`Dispatched live to ${targetPlatform} feed! Check /feed to view.`);
   };
 
   const handleDeleteScheduled = (id: string) => {
-    setScheduledPosts(scheduledPosts.filter((p) => p.id !== id));
+    saveScheduled(scheduledPosts.filter((p) => p.id !== id));
     triggerToast("Post removed from publishing queue.");
   };
 
@@ -143,10 +189,19 @@ export default function SchedulerPage() {
                   type="button"
                   onClick={handleSchedulePost}
                   disabled={!postContent.trim() || charRemaining < 0}
-                  className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold shadow-lg shadow-cyan-600/20 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold shadow-lg shadow-cyan-600/20 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   <Clock className="w-4 h-4" />
                   <span>Queue for Automated Publishing</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handlePublishNow}
+                  disabled={!postContent.trim() || charRemaining < 0}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-lg shadow-emerald-600/20 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>Publish Instantly</span>
                 </button>
               </div>
             </div>
