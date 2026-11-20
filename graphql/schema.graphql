@@ -57,3 +57,4 @@ type Mutation {
   schedulePost(platform: Platform!, content: String!, scheduledFor: String!): ScheduledPost!
   purgeRedisCache(cacheKey: String!): Boolean!
 }
+

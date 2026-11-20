@@ -32,3 +32,4 @@ export interface ScheduledPost {
   scheduledFor: string;
   status: "queued" | "publishing" | "published" | "failed";
 }
+

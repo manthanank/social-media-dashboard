@@ -20,3 +20,4 @@ SocialPulse is a multi-network social media intelligence and scheduling platform
 - `/graphql`: Interactive GraphQL playground and schema documentation explorer.
 - `/settings`: Connected social accounts, Redis cache TTL configuration, and JSON export.
 - `/api/graphql`: GraphQL API endpoint.
+
