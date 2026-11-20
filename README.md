@@ -41,3 +41,4 @@ SocialPulse is a social media management and analytics platform built with Next.
    ```
 
 4. Open [http://localhost:3000](http://localhost:3000).
+
