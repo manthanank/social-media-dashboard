@@ -1,0 +1,59 @@
+"""
+SocialPulse Unified Multi-Network GraphQL Schema
+"""
+
+enum Platform {
+  TWITTER
+  LINKEDIN
+  YOUTUBE
+  INSTAGRAM
+}
+
+enum Sentiment {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+}
+
+type MetricSummary {
+  totalImpressions: Int!
+  totalEngagement: Int!
+  averageEngagementRate: Float!
+  followersGained: Int!
+  redisCacheHit: Boolean!
+  executionTimeMs: Float!
+}
+
+type Post {
+  id: ID!
+  platform: Platform!
+  author: String!
+  handle: String!
+  content: String!
+  publishedAt: String!
+  likes: Int!
+  shares: Int!
+  comments: Int!
+  impressions: Int!
+  sentiment: Sentiment!
+}
+
+type ScheduledPost {
+  id: ID!
+  platform: Platform!
+  content: String!
+  scheduledFor: String!
+  status: String!
+}
+
+type Query {
+  getSummaryMetrics(timeframe: String!): MetricSummary!
+  getFeed(platform: Platform, limit: Int = 20): [Post!]!
+  getScheduledPosts: [ScheduledPost!]!
+}
+
+type Mutation {
+  publishPost(platform: Platform!, content: String!): Post!
+  schedulePost(platform: Platform!, content: String!, scheduledFor: String!): ScheduledPost!
+  purgeRedisCache(cacheKey: String!): Boolean!
+}

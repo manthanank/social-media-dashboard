@@ -1,0 +1,15 @@
+# SocialPulse GraphQL & Redis Dashboard Architecture Rules
+
+1. Next.js 15 App Router:
+   - Use Client Components ('use client') for interactive multi-channel feeds, charts, GraphQL interactive playground, and post scheduling calendar.
+   - Use Server Components where appropriate for metadata and layouts.
+2. GraphQL Schema & Resolution:
+   - Schema defined in `graphql/schema.graphql` with queries (`getFeedMetrics`, `getChannels`, `getPostHistory`) and mutations (`publishPost`, `schedulePost`, `purgeCache`).
+   - Endpoint `/api/graphql` serves queries and handles cache headers.
+3. Cache-Aside Pattern with Redis:
+   - Queries check cache key `feed:all:metrics` with 60s TTL before querying simulated database layer.
+   - Response headers include `X-Cache-Status: HIT | MISS` and execution time.
+4. UI & Responsiveness:
+   - Modern dark SaaS theme with slate-950, cyan, violet, and rose accents.
+   - Framer motion for animated feed entry cards, metric transitions, and modals.
+   - Recharts for cross-channel impression curves and audience engagement breakdowns.
